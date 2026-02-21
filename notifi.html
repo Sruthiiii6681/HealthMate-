@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Notifications</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #4e73df, #1cc88a);
+        margin: 0;
+    }
+
+    /* Header */
+    .header {
+        background: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+    /* Notification Icon */
+    .notification {
+        position: relative;
+        cursor: pointer;
+        font-size: 28px;
+    }
+
+    .badge {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    /* Notification Panel */
+    .panel {
+        display: none;
+        background: white;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .patient-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background: #f9f9f9;
+    }
+
+    button {
+        padding: 8px 15px;
+        margin-top: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .accept {
+        background: #1cc88a;
+    }
+
+    .reject {
+        background: #e74a3b;
+    }
+
+    .message {
+        margin-top: 10px;
+        font-weight: bold;
+        color: green;
+    }
+</style>
+
+<script>
+function toggleNotifications() {
+    var panel = document.getElementById("notificationPanel");
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+}
+
+function handleAction(button, action) {
+    var card = button.closest(".patient-card");
+    var message = document.createElement("div");
+    message.className = "message";
+    message.innerHTML = "Notification has been sent to the patient (" + action + ").";
+    card.appendChild(message);
+
+    // Disable buttons after action
+    var buttons = card.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = true);
+}
+</script>
+
+</head>
+<body>
+
+<div class="header">
+    <h2>Doctor Dashboard</h2>
+
+    <!-- Notification Icon -->
+    <div class="notification" onclick="toggleNotifications()">
+        🔔
+        <span class="badge">1</span>
+    </div>
+</div>
+
+<!-- Notification Panel -->
+<div class="panel" id="notificationPanel">
+
+    <h3>Consultation Requests</h3>
+
+    <div class="patient-card">
+        <h4>Patient Name: Anitha Kumar</h4>
+        <p><strong>Age:</strong> 28</p>
+        <p><strong>Issue:</strong> Fever & Headache</p>
+        <p><strong>Contact:</strong> 9876543210</p>
+
+        <button class="accept" onclick="handleAction(this, 'Accepted')">Accept</button>
+        <button class="reject" onclick="handleAction(this, 'Rejected')">Reject</button>
+    </div>
+
+</div>
+
+</body>
+</html>

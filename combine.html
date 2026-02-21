@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hospital System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Wrapper */
+.wrapper {
+    width: 420px;
+    overflow: hidden;
+}
+
+/* Step Indicator */
+.steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+}
+
+.step.active {
+    background: #4facfe;
+}
+
+/* Slider */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+/* Pages */
+.page {
+    width: 420px;
+    flex-shrink: 0;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Shake animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.3s;
+}
+
+h2 {
+    text-align: center;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    resize: none;
+    height: 70px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4facfe;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0077ff;
+}
+
+.back-btn {
+    background-color: gray;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="steps">
+    <div class="step active" id="step1">1</div>
+    <div class="step" id="step2">2</div>
+    <div class="step" id="step3">3</div>
+</div>
+
+<div class="slider" id="slider">
+
+    <!-- LOGIN -->
+    <div class="page" id="loginPage">
+        <h2>Login</h2>
+        <form onsubmit="return handleLogin()">
+            <label><input type="radio" name="role" value="patient"> Patient</label><br><br>
+            <label><input type="radio" name="role" value="doctor"> Doctor</label>
+            <input type="password" id="loginPass" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- PATIENT REGISTRATION -->
+    <div class="page" id="regPage">
+        <h2>Patient Info</h2>
+        <form onsubmit="return goToBasic()">
+            <input type="text" id="name" placeholder="Full Name">
+            <input type="email" id="email" placeholder="Email">
+            <input type="tel" id="phone" placeholder="Phone">
+            <textarea id="address" placeholder="Address"></textarea>
+            <button type="submit">Next</button>
+        </form>
+        <button class="back-btn" onclick="slideTo(0)">Back</button>
+    </div>
+
+    <!-- BASIC DETAILS -->
+    <div class="page" id="basicPage">
+        <h2>Basic Details</h2>
+        <form onsubmit="return submitPatient()">
+            <input type="number" id="age" placeholder="Age">
+            <select id="sex">
+                <option value="">Select Sex</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+            <input type="number" id="height" placeholder="Height (cm)">
+            <input type="number" id="weight" placeholder="Weight (kg)">
+            <button type="submit">Submit</button>
+        </form>
+        <button class="back-btn" onclick="slideTo(1)">Back</button>
+    </div>
+
+    <!-- DOCTOR PAGE -->
+    <div class="page" id="doctorPage">
+        <h2>Doctor Dashboard</h2>
+        <p style="text-align:center;">Doctor form here</p>
+        <button class="back-btn" onclick="slideTo(0)">Back</button>
+    </div>
+
+</div>
+</div>
+
+<script>
+const slider = document.getElementById("slider");
+const steps = document.querySelectorAll(".step");
+const pageWidth = 420;
+
+function updateSteps(index) {
+    steps.forEach((step, i) => {
+        step.classList.remove("active");
+        if (i <= index && index < 3) {
+            step.classList.add("active");
+        }
+    });
+}
+
+function slideTo(index) {
+    slider.style.transform = `translateX(-${index * pageWidth}px)`;
+    updateSteps(index);
+}
+
+function shakePage(pageId) {
+    const page = document.getElementById(pageId);
+    page.classList.add("shake");
+    setTimeout(() => page.classList.remove("shake"), 300);
+}
+
+function handleLogin() {
+    const role = document.querySelector('input[name="role"]:checked');
+    const pass = document.getElementById("loginPass").value;
+
+    if (!role || pass.trim() === "") {
+        shakePage("loginPage");
+        return false;
+    }
+
+    if (role.value === "patient") {
+        slideTo(1);
+    } else {
+        slideTo(3);
+    }
+
+    return false;
+}
+
+function goToBasic() {
+    if (
+        !document.getElementById("name").value.trim() ||
+        !document.getElementById("email").value.trim() ||
+        !document.getElementById("phone").value.trim() ||
+        !document.getElementById("address").value.trim()
+    ) {
+        shakePage("regPage");
+        return false;
+    }
+
+    slideTo(2);
+    return false;
+}
+
+function submitPatient() {
+    if (
+        !document.getElementById("age").value ||
+        !document.getElementById("sex").value ||
+        !document.getElementById("height").value ||
+        !document.getElementById("weight").value
+    ) {
+        shakePage("basicPage");
+        return false;
+    }
+
+    alert("Patient Registration Complete!");
+    slideTo(0);
+    updateSteps(0);
+    return false;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Patient Basic Details</title>
+<style>
+    body {
+        font-family: Arial;
+        background: linear-gradient(to right, #36d1dc, #5b86e5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .box {
+        background: white;
+        padding: 30px;
+        width: 350px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #36d1dc;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #2a9ea5;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Basic Patient Details</h2>
+
+    <form action="patient_medical.html">
+        <input type="number" placeholder="Age" required>
+
+        <select required>
+            <option value="">Select Sex</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+
+        <input type="number" placeholder="Height (cm)" required>
+        <input type="number" placeholder="Weight (kg)" required>
+
+        <button type="submit">Next</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor-Patient Communication</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #36d1dc, #5b86e5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    background: white;
+    width: 420px;
+    height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background: #36d1dc;
+    padding: 15px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.video-btn {
+    background: white;
+    color: #36d1dc;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f4f6f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    padding: 8px 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    max-width: 70%;
+    font-size: 14px;
+}
+
+.doctor {
+    background: #d4edda;
+    align-self: flex-start;
+}
+
+.patient {
+    background: #cce5ff;
+    align-self: flex-end;
+}
+
+.timestamp {
+    font-size: 10px;
+    color: gray;
+    margin-top: 3px;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+select {
+    margin-right: 5px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 8px 10px;
+    margin-left: 5px;
+    background: #36d1dc;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-label {
+    background: #888;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+video {
+    width: 100%;
+    border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat-container">
+
+    <div class="chat-header">
+        Doctor – Patient Chat
+        <button class="video-btn" onclick="startVideoCall()">📹 Video</button>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="chat-input">
+        <select id="role">
+            <option value="doctor">Doctor</option>
+            <option value="patient">Patient</option>
+        </select>
+
+        <input type="text" id="messageInput" placeholder="Type message...">
+
+        <label class="file-label">
+            📎
+            <input type="file" id="fileInput" onchange="sendFile()">
+        </label>
+
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+function sendMessage() {
+    var messageText = document.getElementById("messageInput").value;
+    var role = document.getElementById("role").value;
+    var chatBox = document.getElementById("chatBox");
+
+    if (messageText.trim() === "") return;
+
+    var messageDiv = document.createElement("div");
+    messageDiv.classList.add("message", role);
+
+    var time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+    messageDiv.innerHTML = messageText +
+        "<div class='timestamp'>" + time + "</div>";
+
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    document.getElementById("messageInput").value = "";
+}
+
+function sendFile() {
+    var fileInput = document.getElementById("fileInput");
+    var file = fileInput.files[0];
+    var role = document.getElementById("role").value;
+    var chatBox = document.getElementById("chatBox");
+
+    if (!file) return;
+
+    var messageDiv = document.createElement("div");
+    messageDiv.classList.add("message", role);
+
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+        if (file.type.startsWith("image/")) {
+            messageDiv.innerHTML = "<img src='" + e.target.result + "' width='150'><br>";
+        } else {
+            messageDiv.innerHTML = "📄 " + file.name + "<br>";
+        }
+
+        var time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        messageDiv.innerHTML += "<div class='timestamp'>" + time + "</div>";
+
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function startVideoCall() {
+    var chatBox = document.getElementById("chatBox");
+
+    var videoDiv = document.createElement("div");
+    videoDiv.classList.add("message", "doctor");
+
+    videoDiv.innerHTML = "<video id='localVideo' autoplay></video>";
+
+    chatBox.appendChild(videoDiv);
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(function(stream) {
+            document.getElementById("localVideo").srcObject = stream;
+        })
+        .catch(function(error) {
+            alert("Camera access denied or not available.");
+        });
+}
+</script>
+
+</body>
+</html>

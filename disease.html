@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Patient Medical Details</title>
+<style>
+    body {
+        font-family: Arial;
+        background: linear-gradient(to right, #ff9966, #ff5e62);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .box {
+        background: white;
+        padding: 30px;
+        width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    textarea {
+        resize: none;
+        height: 60px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #ff5e62;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #e04e52;
+    }
+
+    .extra-field {
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+function addMoreField() {
+    var div = document.createElement("div");
+    div.className = "extra-field";
+    div.innerHTML = '<input type="text" placeholder="Enter Additional Disease/Detail">';
+    document.getElementById("extraFields").appendChild(div);
+}
+</script>
+
+</head>
+<body>
+
+<div class="box">
+    <h2>Medical Details</h2>
+
+    <form>
+        <input type="text" placeholder="Blood Pressure Level (e.g., 120/80)" required>
+        <input type="text" placeholder="Blood Sugar Level" required>
+        <input type="text" placeholder="Cholesterol Level" required>
+
+        <textarea placeholder="Allergy Details"></textarea>
+
+        <div id="extraFields"></div>
+
+        <button type="button" onclick="addMoreField()">+ Add More</button>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

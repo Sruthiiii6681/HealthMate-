@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Smart Hospital System</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial}
+body{
+margin:0;
+background:linear-gradient(to right,#4facfe,#00f2fe);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+.wrapper{
+width:430px;
+overflow:hidden;
+}
+.slider{
+display:flex;
+transition:0.5s;
+}
+.page{
+width:430px;
+flex-shrink:0;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+overflow-y:auto;
+height:90vh;
+}
+h2{text-align:center}
+input,select,textarea{
+width:100%;
+padding:8px;
+margin:6px 0;
+border-radius:5px;
+border:1px solid #ccc;
+}
+button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:5px;
+background:#4facfe;
+color:white;
+cursor:pointer;
+}
+button:hover{background:#0077ff}
+.back{background:gray}
+.card{
+border:1px solid #ddd;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+}
+.chat-box{
+height:300px;
+overflow:auto;
+background:#f4f4f4;
+padding:10px;
+margin-bottom:5px;
+}
+.message{
+padding:6px 10px;
+margin:5px 0;
+border-radius:10px;
+max-width:70%;
+}
+.patient{background:#cce5ff;margin-left:auto}
+.doctor{background:#d4edda}
+.notification{
+cursor:pointer;
+font-size:22px;
+}
+iframe{width:100%;height:180px;border-radius:8px}
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+<div class="slider" id="slider">
+
+<!-- LOGIN -->
+<div class="page">
+<h2>Login</h2>
+<label><input type="radio" name="role" value="patient"> Patient</label><br>
+<label><input type="radio" name="role" value="doctor"> Doctor</label>
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+
+<!-- PATIENT PERSONAL -->
+<div class="page">
+<h2>Patient Personal Details</h2>
+<input id="pname" placeholder="Name">
+<input id="pemail" placeholder="Email">
+<input id="pphone" placeholder="Phone">
+<button onclick="slide(2)">Next</button>
+<button class="back" onclick="slide(0)">Back</button>
+</div>
+
+<!-- PATIENT BASIC -->
+<div class="page">
+<h2>Basic Details</h2>
+<input id="page" placeholder="Age">
+<select id="psex">
+<option value="">Sex</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+<input id="pheight" placeholder="Height">
+<input id="pweight" placeholder="Weight">
+<button onclick="slide(3)">Next</button>
+<button class="back" onclick="slide(1)">Back</button>
+</div>
+
+<!-- PATIENT HEALTH -->
+<div class="page">
+<h2>Health Details</h2>
+<input placeholder="Blood Pressure">
+<input placeholder="Blood Sugar">
+<input placeholder="Cholesterol">
+<textarea placeholder="Allergies"></textarea>
+<button onclick="slide(4)">Next</button>
+<button class="back" onclick="slide(2)">Back</button>
+</div>
+
+<!-- SYMPTOMS -->
+<div class="page">
+<h2>Select Symptoms</h2>
+<label><input type="checkbox" value="fever"> Fever</label>
+<label><input type="checkbox" value="cough"> Cough</label>
+<label><input type="checkbox" value="heart"> Chest Pain</label>
+<input id="extraSymptom" placeholder="Other symptom">
+<button onclick="addSymptom()">Add</button>
+<button onclick="findDoctors()">Find Doctors</button>
+<div id="doctorList"></div>
+<button class="back" onclick="slide(3)">Back</button>
+</div>
+
+<!-- DOCTOR DETAILS -->
+<div class="page">
+<h2>Doctor Details</h2>
+<input id="dname" placeholder="Doctor Name">
+<input placeholder="Registration Number">
+<select>
+<option>Specialization</option>
+<option>General Physician</option>
+<option>Cardiologist</option>
+<option>Dermatologist</option>
+</select>
+<input placeholder="Email">
+<button onclick="slide(6)">Next</button>
+<button class="back" onclick="slide(0)">Back</button>
+</div>
+
+<!-- CLINIC DETAILS -->
+<div class="page">
+<h2>Clinic Details</h2>
+<input placeholder="Clinic Address">
+<input placeholder="Clinic Contact">
+<input placeholder="Timing">
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019675770335!2d-122.41941548468163!3d37.77492977975933"></iframe>
+<button onclick="slide(7)">Next</button>
+<button class="back" onclick="slide(5)">Back</button>
+</div>
+
+<!-- DOCTOR DASHBOARD -->
+<div class="page">
+<h2>Doctor Dashboard 🔔</h2>
+<div id="notificationArea"></div>
+<button onclick="slide(8)">Open Chat</button>
+<button class="back" onclick="slide(0)">Logout</button>
+</div>
+
+<!-- CHAT PAGE -->
+<div class="page">
+<h2>Doctor - Patient Chat</h2>
+<div class="chat-box" id="chatBox"></div>
+<select id="chatRole">
+<option value="patient">Patient</option>
+<option value="doctor">Doctor</option>
+</select>
+<input id="chatInput" placeholder="Message">
+<input type="file" onchange="sendFile(event)">
+<button onclick="sendMessage()">Send</button>
+<button onclick="videoCall()">📹 Video</button>
+<button class="back" onclick="slide(7)">Back</button>
+</div>
+
+</div>
+</div>
+
+<script>
+const slider=document.getElementById("slider")
+let current=0
+let doctors=[
+{name:"Dr. Anil",spec:"General Physician",treats:["fever","cough"]},
+{name:"Dr. Rahul",spec:"Cardiologist",treats:["heart"]}
+]
+let appointments=[]
+
+function slide(i){
+current=i
+slider.style.transform="translateX(-"+(430*i)+"px)"
+}
+
+function login(){
+let role=document.querySelector("input[name=role]:checked")
+if(!role)return alert("Select role")
+if(role.value==="patient")slide(1)
+else slide(5)
+}
+
+function addSymptom(){
+let s=document.getElementById("extraSymptom").value
+if(!s)return
+let label=document.createElement("label")
+label.innerHTML=`<input type="checkbox" value="${s}" checked> ${s}`
+document.getElementById("extraSymptom").before(label)
+}
+
+function findDoctors(){
+let selected=[]
+document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>selected.push(c.value))
+let list=document.getElementById("doctorList")
+list.innerHTML=""
+doctors.forEach(d=>{
+if(selected.some(s=>d.treats.includes(s))){
+list.innerHTML+=`
+<div class="card">
+<b>${d.name}</b><br>
+${d.spec}<br>
+<button onclick="book('${d.name}')">Book Appointment</button>
+</div>`
+}
+})
+}
+
+function book(name){
+appointments.push({doctor:name,patient:document.getElementById("pname").value})
+alert("Appointment sent to doctor")
+updateNotifications()
+}
+
+function updateNotifications(){
+let area=document.getElementById("notificationArea")
+area.innerHTML=""
+appointments.forEach((a,i)=>{
+area.innerHTML+=`
+<div class="card">
+Patient: ${a.patient}<br>
+<button onclick="respond(${i},'Accepted')">Accept</button>
+<button onclick="respond(${i},'Rejected')">Reject</button>
+</div>`
+})
+}
+
+function respond(i,status){
+alert("Notification sent to patient: "+status)
+appointments.splice(i,1)
+updateNotifications()
+}
+
+function sendMessage(){
+let text=document.getElementById("chatInput").value
+if(!text)return
+let role=document.getElementById("chatRole").value
+let div=document.createElement("div")
+div.className="message "+role
+div.innerText=text
+document.getElementById("chatBox").appendChild(div)
+document.getElementById("chatInput").value=""
+}
+
+function sendFile(e){
+let file=e.target.files[0]
+if(!file)return
+let div=document.createElement("div")
+div.className="message patient"
+div.innerHTML="📎 "+file.name
+document.getElementById("chatBox").appendChild(div)
+}
+
+function videoCall(){
+navigator.mediaDevices.getUserMedia({video:true,audio:true})
+.then(stream=>{
+let video=document.createElement("video")
+video.autoplay=true
+video.srcObject=stream
+video.style.width="100%"
+document.getElementById("chatBox").appendChild(video)
+})
+.catch(()=>alert("Camera not allowed"))
+}
+</script>
+
+</body>
+</html>

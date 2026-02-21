@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Clinic Details Form</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #11998e, #38ef7d);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .form-box {
+        background: white;
+        padding: 30px;
+        width: 420px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    textarea {
+        resize: none;
+        height: 80px;
+    }
+
+    iframe {
+        width: 100%;
+        height: 200px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #11998e;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #0d7f75;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Clinic Details</h2>
+
+    <form action="nextpage.html">
+        
+        <input type="text" placeholder="Clinic Location (City/Area)" required>
+
+        <input type="tel" placeholder="Clinic Contact Number" required>
+
+        <textarea placeholder="Clinic Address" required></textarea>
+
+        <!-- Google Maps Link Input -->
+        <input type="url" placeholder="Paste Google Maps Location Link">
+
+        <!-- Embedded Google Map -->
+        <label><b>Clinic Location on Map:</b></label>
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019675770335!2d-122.41941548468163!3d37.77492977975933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c5f3f3f3f%3A0x4f3f3f3f3f3f3f3f!2sSan%20Francisco!5e0!3m2!1sen!2sin!4v1616581234567" 
+            allowfullscreen="" 
+            loading="lazy">
+        </iframe>
+
+        <button type="submit">Submit</button>
+
+    </form>
+</div>
+
+</body>
+</html>

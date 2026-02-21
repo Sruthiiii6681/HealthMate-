@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Details Form</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .form-box {
+        background: white;
+        padding: 30px;
+        width: 380px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #667eea;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #5563c1;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Doctor Details</h2>
+
+    <form action="nextpage.html">
+        <input type="text" placeholder="Doctor Name" required>
+
+        <input type="text" placeholder="Registration Number" required>
+
+        <select required>
+            <option value="">Select Specialization</option>
+            <option>Cardiologist</option>
+            <option>Dermatologist</option>
+            <option>Neurologist</option>
+            <option>Pediatrician</option>
+            <option>Orthopedic</option>
+            <option>General Physician</option>
+        </select>
+
+        <input type="email" placeholder="Email Address" required>
+
+        <button type="submit">Next</button>
+    </form>
+</div>
+
+</body>
+</html>

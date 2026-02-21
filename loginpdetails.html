@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hospital System</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 400px;
+}
+
+.box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    resize: none;
+    height: 80px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4facfe;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0077ff;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGIN PAGE -->
+    <div class="box" id="loginPage">
+        <h2>Hospital Login</h2>
+
+        <form onsubmit="return handleLogin()">
+
+            <label>
+                <input type="radio" name="role" value="patient" required>
+                Login as Patient
+            </label>
+            <br><br>
+            <label>
+                <input type="radio" name="role" value="doctor">
+                Login as Doctor
+            </label>
+
+            <input type="password" placeholder="Enter Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- PATIENT REGISTRATION PAGE -->
+    <div class="box hidden" id="registrationPage">
+        <h2>Patient Registration</h2>
+
+        <form onsubmit="return registerPatient()">
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="tel" placeholder="Phone Number" required>
+            <input type="number" placeholder="Age" required>
+            <textarea placeholder="Enter Address" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+
+        <button onclick="goBack()">Back to Login</button>
+    </div>
+
+    <!-- DOCTOR DASHBOARD -->
+    <div class="box hidden" id="doctorPage">
+        <h2>Doctor Dashboard</h2>
+        <p style="text-align:center;">Login Successful!</p>
+        <button onclick="goBack()">Logout</button>
+    </div>
+
+</div>
+
+<script>
+function handleLogin() {
+    const role = document.querySelector('input[name="role"]:checked');
+
+    if (!role) {
+        alert("Please select a role.");
+        return false;
+    }
+
+    document.getElementById("loginPage").classList.add("hidden");
+
+    if (role.value === "patient") {
+        document.getElementById("registrationPage").classList.remove("hidden");
+    } else {
+        document.getElementById("doctorPage").classList.remove("hidden");
+    }
+
+    return false; // Prevent page reload
+}
+
+function registerPatient() {
+    alert("Patient Registered Successfully!");
+    return false;
+}
+
+function goBack() {
+    document.getElementById("loginPage").classList.remove("hidden");
+    document.getElementById("registrationPage").classList.add("hidden");
+    document.getElementById("doctorPage").classList.add("hidden");
+}
+</script>
+
+</body>
+</html>

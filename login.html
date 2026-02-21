@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hospital System</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Wrapper */
+.wrapper {
+    width: 400px;
+    overflow: hidden;
+}
+
+/* Sliding container */
+.slider {
+    display: flex;
+    width: 1200px; /* 3 pages */
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Each page */
+.page {
+    width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    resize: none;
+    height: 70px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4facfe;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0077ff;
+}
+
+.back-btn {
+    background-color: gray;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="slider" id="slider">
+
+        <!-- LOGIN PAGE -->
+        <div class="page">
+            <h2>Hospital Login</h2>
+            <form onsubmit="return handleLogin()">
+                <label>
+                    <input type="radio" name="role" value="patient" required>
+                    Login as Patient
+                </label>
+                <br><br>
+                <label>
+                    <input type="radio" name="role" value="doctor">
+                    Login as Doctor
+                </label>
+
+                <input type="password" placeholder="Enter Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- PATIENT PAGE -->
+        <div class="page">
+            <h2>Patient Registration</h2>
+            <form onsubmit="return registerPatient()">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <input type="number" placeholder="Age" required>
+                <textarea placeholder="Address" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+            <button class="back-btn" onclick="goBack()">⬅ Back to Login</button>
+        </div>
+
+        <!-- DOCTOR PAGE -->
+        <div class="page">
+            <h2>Doctor Details</h2>
+            <form onsubmit="return doctorSubmit()">
+                <input type="text" placeholder="Doctor Name" required>
+                <input type="text" placeholder="Registration Number" required>
+
+                <select required>
+                    <option value="">Select Specialization</option>
+                    <option>Cardiologist</option>
+                    <option>Dermatologist</option>
+                    <option>Neurologist</option>
+                    <option>Pediatrician</option>
+                    <option>Orthopedic</option>
+                    <option>General Physician</option>
+                </select>
+
+                <input type="email" placeholder="Email Address" required>
+                <button type="submit">Next</button>
+            </form>
+            <button class="back-btn" onclick="goBack()">⬅ Back to Login</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const slider = document.getElementById("slider");
+
+function handleLogin() {
+    const role = document.querySelector('input[name="role"]:checked');
+
+    if (!role) {
+        alert("Please select a role.");
+        return false;
+    }
+
+    if (role.value === "patient") {
+        slider.style.transform = "translateX(-400px)";
+    } else {
+        slider.style.transform = "translateX(-800px)";
+    }
+
+    return false; // Prevent reload
+}
+
+function goBack() {
+    slider.style.transform = "translateX(0px)";
+
+    // Reset radio buttons
+    const radios = document.querySelectorAll('input[name="role"]');
+    radios.forEach(radio => radio.checked = false);
+}
+
+function registerPatient() {
+    alert("Patient Registered Successfully!");
+    return false;
+}
+
+function doctorSubmit() {
+    alert("Doctor Details Submitted Successfully!");
+    return false;
+}
+</script>
+
+</body>
+</html>
